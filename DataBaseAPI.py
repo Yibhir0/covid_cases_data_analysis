@@ -1,16 +1,15 @@
 # Yassine Ibhir & David Pizzolongo
 import mysql.connector
-import data_base_schema as schema
-from FileIO import FileIO
-from ScrapeClass import ScrapeClass
+import os
 
+import data_base_schema as schema
 
 class My_DB_SQL:
 
     def __init__(self):
-        self.__usr = 'root'
+        self.__usr = os.environ['MYSQL_USR']
         self.__hst = 'localhost'
-        self.__pwd = 'Flous101992'
+        self.__pwd = os.environ['MYSQL_PWD']
         self.__conn = None
         self.__cursr = None
 
@@ -67,7 +66,6 @@ class My_DB_SQL:
         sql_stm = ""
         if table_name == 'corona_table':
             columns = len(list_tuples[0]) - 1
-            print('-------', columns)
             columns_format = '(' + '%s,' * columns + '%s )'
             sql_stm = "insert into " + table_name + " values" + columns_format
         elif table_name == 'country_borders_table':
@@ -90,25 +88,3 @@ class My_DB_SQL:
         self.__select_db(schema.data_base_name)
 
         self.__create_table(table_name, table_schema)
-
-
-#  Testing
-
-data_days = ['2021-03-18', '2021-03-17', '2021-03-16']
-
-filename = "local_html/local_page2021-03-18.html"
-html_file = FileIO(filename)
-html_file.read_html_binary()
-html_binary = html_file.get_data_file_result()
-scr = ScrapeClass(html_binary)
-scr.scrape_tables(data_days)
-data_of_3_days = scr.get_lst_tuples()
-
-dbs_obj = My_DB_SQL()
-dbs_obj.connection_db(None)
-
-# json_obj = FileIO('countries_json/country_neighbour_dist_file.json')
-# json_obj.readJsonFile()
-# json_obj.format_json_to_tuples()
-# countries_tuples = json_obj.get_list_countries_tuples()
-dbs_obj.populate_table('corona_table', schema.corona_table, data_of_3_days)
