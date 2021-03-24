@@ -8,26 +8,25 @@ corona_table = '''( date_cases date NOT NULL,
                 totalCases int NULL,
                 NewCases int NULL,
                 totalDeaths int NULL,
-                newDeaths int DEFAULT NULL,
+                newDeaths int NULL,
                 totalRecovered int NULL,
                 newRecovered int NULL,
                 activeCases int NULL,
                 seriousCritical int NULL,
-                totalCasesPM decimal NULL,
-                deathsPM decimal NULL,
+                totalCasesPM decimal(10,2) NULL,
+                deathsPM decimal(10,2) NULL,
                 totalTests int NULL,
-                testsPM decimal NULL,
+                testsPM decimal(10,2) NULL,
                 population int NULL,
-                continent varchar(50),
+                continent varchar(50) NULL,
                 casesEveryXPeople int NULL,
                 deathsEveryXPeople int NULL,
                 testEveryXPeople int NULL,
-                PRIMARY KEY (date_cases, country_other) );'''
+                PRIMARY KEY (country_other, date_cases) );'''
 
 
 country_borders_table = '''(country_other varchar(50) NOT NULL,
                 border_country varchar(50) NULL,
-                distance int(10) NULL,
-                CONSTRAINT cntry_fk_1 FOREIGN KEY (country_other) REFERENCES corona_table(country_other)
+                distance decimal(10,2) NULL
                 ); '''
 
