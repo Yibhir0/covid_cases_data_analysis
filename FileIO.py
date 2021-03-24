@@ -1,7 +1,6 @@
 # Yassine Ibhir & David Pizzolongo
 import json
 
-
 class FileIO:
 
     # initialize all variables of the FileIO object
@@ -29,7 +28,7 @@ class FileIO:
             for country, borders in countries.items():
                 for border, distance in borders.items():
                     tuples_borders = (country, border, distance)
-                    self.self.__data_file_result.append(tuples_borders)
+                    self.__data_file_result.append(tuples_borders)
 
     # returns data_file_result which could be htmlBytes or countries_borders (list of tuple)
     def get_data_file_result(self):

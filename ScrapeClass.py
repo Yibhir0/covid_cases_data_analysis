@@ -1,7 +1,5 @@
+# Yassine Ibhir & David Pizzolongo
 from bs4 import BeautifulSoup as bs
-from FileIO import FileIO
-from WebRequestClass import WebRequestClass
-
 
 class ScrapeClass:
 
@@ -67,63 +65,3 @@ class ScrapeClass:
 
         return self.__lst_clean_tuples
 
-
-# testing
-
-# data_days = ['2021-03-19', '2021-03-18', '2021-03-18']
-#
-# filename = "local_html/local_page2021-03-19.html"
-# html_file = FileIO(filename)
-# html_file.read_html_binary()
-# html_binary = html_file.get_data_file_result()
-# scr = ScrapeClass(html_binary)
-# scr.scrape_tables(data_days)
-# data_of_3_days = scr.get_lst_tuples()
-# print(data_of_3_days)
-
-# The code below has to be in the driverClass
-# file_name = "local_html/local_page2021-03-19.html"
-
-# make request
-# def url_request():
-#     url = "https://www.worldometers.info/coronavirus/"
-#     req = WebRequestClass(url)  # request to the web which will happen twice
-#     html_bytes = req.get_html_binary()  # get_html bytes
-#     return html_bytes
-#
-#
-# def save_to_local(html_bits, filename):
-#     html_file = FileIO(filename)
-#     html_file.save_to_local_file(html_bits)
-
-# this method will be used everytime we run the program
-# def scrape_from_local_file(filename):
-#     html_file = FileIO(filename)
-#     html_file.read_html_binary()
-#     html_binary = html_file.get_data_file_result()
-#     return html_binary
-
-
-#
-#
-# def scrape_all_tables(html_bytes,data_days):
-#     scrape_obj = ScrapeClass(html_bytes)
-#     table_list = scrape_obj.scrape_tables()
-#     final_corona_data = scrape_obj.get_lst_tuples()
-#     return final_corona_data
-
-
-#
-#
-# # testing
-# file_name = "local_html/local_page2021-03-21.html"
-# # make a request
-# html_file_content = url_request()
-# # save to local file
-# save_to_local(html_file_content, file_name)
-# # # scrape from local file
-
-# html_file_content = scrape_from_local_file(file_name)
-#
-# corona_data = scrape_all_tables(html_file_content, '2021-03-21', '2021-03-22', '2021-03-23')
-# print(len(corona_data))

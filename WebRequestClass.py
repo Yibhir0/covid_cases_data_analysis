@@ -1,3 +1,4 @@
+# Yassine Ibhir & David Pizzolongo
 from urllib.request import Request, urlopen
 
 
@@ -15,5 +16,5 @@ class WebRequestClass:
             html_code = urlopen(req)
             self.__html_binary = html_code.read()
         except Exception as err:
-            print('Can not get the request'.format(err))
+            print('Can not get the request{}'.format(err))
         return self.__html_binary
