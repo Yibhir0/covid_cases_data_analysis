@@ -4,7 +4,7 @@ from datetime import date
 
 import data_base_schema as schema
 
-from DataBaseAPI import My_DB_SQL
+from Database_management import My_DB_SQL
 from WebRequestClass import WebRequestClass
 from FileIO import FileIO
 from ScrapeClass import ScrapeClass
@@ -35,9 +35,9 @@ def scrape_all_tables(html_bytes, data_days):
     final_corona_data = scrape_obj.get_lst_tuples()
     return final_corona_data
 
-def scrape_local_web_file():
+def save_web_file():
     today = str(date.today())
-    fileName = 'local_page' + today + '.html'
+    fileName = 'local_html/local_page' + today + '.html'
     page_bytes = url_request()
     save_to_local(page_bytes, fileName)
 
@@ -65,3 +65,4 @@ if __name__ == "__main__":
     
     schemaCountry = schema.country_borders_table
     write_to_DB('country_borders_table', schemaCountry, clean_data_country)
+    # save_web_file()

@@ -29,7 +29,6 @@ class FileIO:
                 for border, distance in borders.items():
                     tuples_borders = (country, border, distance)
                     self.__data_file_result.append(tuples_borders)
-        print(self.__data_file_result)
 
     # returns data_file_result which could be htmlBytes or countries_borders (list of tuple)
     def get_data_file_result(self):
