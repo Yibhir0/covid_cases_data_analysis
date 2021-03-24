@@ -4,12 +4,13 @@ import os
 
 import data_base_schema as schema
 
+
 class My_DB_SQL:
 
     def __init__(self):
-        self.__usr = os.environ['MYSQL_USR']
+        self.__usr = 'root'  # os.environ['MYSQL_USR']
         self.__hst = 'localhost'
-        self.__pwd = os.environ['MYSQL_PWD']
+        self.__pwd = 'Flous101992'  # os.environ['MYSQL_PWD']
         self.__conn = None
         self.__cursr = None
 
@@ -20,18 +21,21 @@ class My_DB_SQL:
                 self.__conn = mysql.connector.connect(host=self.__hst,
                                                       user=self.__usr,
                                                       passwd=self.__pwd)
-                self.__cursr = self.__conn.cursor()
+
             else:
                 self.__conn = mysql.connector.connect(host=self.__hst,
                                                       user=self.__usr,
                                                       passwd=self.__pwd,
                                                       database=db_name)
-
+            self.__cursr = self.__conn.cursor()
         except mysql.connector.Error as err:
-            print('problem with database {}'.format(err))    
-            
+            print('problem with database {}'.format(err))
+
     def get_connection(self):
         return self.__conn
+
+    def get_cursor(self):
+        return self.__cursr
 
     # close cursor and connection
     def close_connection(self):

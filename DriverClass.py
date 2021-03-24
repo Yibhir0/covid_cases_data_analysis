@@ -53,15 +53,23 @@ def write_to_DB(table, schema, list_clean_tuples):
     dbs_obj.populate_table(table, schema, list_clean_tuples)
  
 if __name__ == "__main__":
+
     DATA_DAYS = ('2021-03-19', '2021-03-20', '2021-03-21')
     filename = "local_html/local_page2021-03-21.html"
+    DATA_DAYS1 = ('2021-03-22', '2021-03-23', '2021-03-24')
+    filename1 = "local_html/local_page2021-03-24.html"
+
     html_bytes = scrape_from_local_file(filename)
     clean_data_corona = scrape_all_tables(html_bytes, DATA_DAYS)
+
+    html_bytes1 = scrape_from_local_file(filename1)
+    clean_data_corona1 = scrape_all_tables(html_bytes, DATA_DAYS1)
     
     clean_data_country = use_json()
     
     schemaCorona = schema.corona_table
     write_to_DB('corona_table', schemaCorona, clean_data_corona)
+    write_to_DB('corona_table', schemaCorona, clean_data_corona1)
     
     schemaCountry = schema.country_borders_table
     write_to_DB('country_borders_table', schemaCountry, clean_data_country)
