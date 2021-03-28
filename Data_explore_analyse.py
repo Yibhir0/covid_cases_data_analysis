@@ -13,10 +13,10 @@ class DataAnalysis:
 
         self.__df = pd.read_sql_query(query, conn)
 
-
     # def plot 6 day indicators
     def plot_6Days_3Indicators(self, country):
         if not self.__df.empty:
+            self.impute_null_values()
             self.__df.set_index('date_cases', inplace=True)
             ax = self.__df.plot(kind='bar', title='6-days indicators evolution of ' + country, figsize=(8, 6))
             ax.set_xlabel("date")
@@ -26,7 +26,27 @@ class DataAnalysis:
         else:
             print('Sorry no data for ', country)
 
+    def plot_6Days_newCases(self, country):
+        if not self.__df.empty:
+            self.impute_null_values()
+            print(self.__df)
+            cond1 = self.__df['country_other'] == country
+            out1 = self.__df[cond1]
+            out1.set_index(['date_cases'], inplace=True)
+            ax = out1.plot(kind='bar', title='6-days new cases ' + country, figsize=(8, 6),color='blue' )
+            cond2 = self.__df['country_other'] == 'France'
+            out2 = self.__df[cond2]
+            out2.set_index(['date_cases'], inplace=True)
+            out2.plot(kind='bar', ax=ax, width=0.3, color='red', linewidth=3, alpha=.5)
+            ax.set_xlabel("date")
+            ax.set_ylabel("new cases")
+            plt.xticks(rotation=0)
+            plt.show()
+        else:
+            print('Sorry no data for ', country)
 
+    def impute_null_values(self):
+        self.__df.fillna(100,inplace=True)
 # Module's methods for exploring and plotting
 
 # main method to ask for the day and country to explore by plotting the 3 graphs
@@ -35,6 +55,7 @@ def explore_saved_data_main_program():
     country = choice.capitalize()
     explore_6days_indicators(country)
     explore_6days_newCases_farthest_neighbor(country)
+
 
 # get list of the country borders
 def get_border_countries(country, limit):
@@ -54,12 +75,13 @@ def get_border_countries(country, limit):
 # build a query that we will with Data Frame
 def build_query(countries, columns_str):
     fields = ','.join(columns_str)
-    query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other = ' '"' + countries + '"' + ';'
+    query = None
     if type(countries) is list:
         countries = tuple(countries)
         query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other in {};'.format(
             countries)
-
+    else:
+        query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other = ' '"' + countries + '"' + ';'
     return query
 
 
@@ -76,19 +98,20 @@ def explore_6days_indicators(country):
     df.plot_6Days_3Indicators(country)
     dbs.close_connection()
 
+
 # this method first prepares the query and connection for dataFrame Object
 # and then calls the plotting method for NewCases indicator
 def explore_6days_newCases_farthest_neighbor(country):
     borders = get_border_countries(country, 1)
-    columns_str = ['NewCases']
+    columns_str = ['date_cases', 'NewCases', 'country_other']
     query = build_query(borders, columns_str)
     dbs = dbm()
     dbs.connection_db(schema.data_base_name)
     con = dbs.get_connection()
     df = DataAnalysis(query, con)
-    df.plot_6Days_3Indicators()
+    df.plot_6Days_newCases(country)
     dbs.close_connection()
-
+#
 #
 # def explore_3days_DeathsPm_2farthest_neighbors(country, first_day):
 #     datetime.now() + datetime.timedelta(days=1)
