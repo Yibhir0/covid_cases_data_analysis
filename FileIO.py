@@ -1,6 +1,7 @@
 # Yassine Ibhir & David Pizzolongo
 import json
 
+
 class FileIO:
 
     # initialize all variables of the FileIO object
@@ -11,18 +12,18 @@ class FileIO:
 
     # method reads from json file and returns a list of countries and borders
     def readJsonFile(self):
-        countries_border = []
+
         try:
             self.__file_obj = open(self.__filename)
-            countries_border = json.load(self.__file_obj)
+            self.__data_file_result = json.load(self.__file_obj)
         except IOError:
             print('file process problem...')
         finally:
             self.__file_obj.close()
-        return countries_border
 
     # format json file data (countries and borders) to list of tuples
-    def format_json_to_tuples(self, countries_border):
+    def format_json_to_tuples(self):
+        countries_border = self.__data_file_result
         self.__data_file_result = []  # list of tuples
         for countries in countries_border:
             for country, borders in countries.items():
@@ -39,6 +40,7 @@ class FileIO:
         try:
             self.__file_obj = open(self.__filename, 'wb')
             self.__file_obj.write(bytes(html_bytes))
+            print(self.__filename, ' is saved into local_html..')
 
         except IOError:
             print('file process problem...')
