@@ -1,15 +1,15 @@
 # Yassine Ibhir & David Pizzolongo
 import mysql.connector
+import os 
 
 import data_base_schema as schema
-
 
 class My_DB_SQL:
 
     def __init__(self):
-        self.__usr = 'root'  # os.environ['MYSQL_USR']
+        self.__usr = os.environ['MYSQL_USR']
         self.__hst = 'localhost'
-        self.__pwd = 'Flous101992'  # os.environ['MYSQL_PWD']
+        self.__pwd = os.environ['MYSQL_PWD']
         self.__conn = None
         self.__cursr = None
 

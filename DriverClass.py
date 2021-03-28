@@ -1,7 +1,4 @@
 # Yassine Ibhir & David Pizzolongo
-import datetime
-from datetime import date
-
 from Data_explore_analyse import explore_saved_data_main_program
 
 from WebRequestClass import make_request_main_program

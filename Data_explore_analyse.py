@@ -34,7 +34,7 @@ def explore_saved_data_main_program():
     choice = input('Enter the name of the country you want to explore?')
     country = choice.capitalize()
     explore_6days_indicators(country)
-
+    explore_6days_newCases_farthest_neighbor(country)
 
 # get list of the country borders
 def get_border_countries(country, limit):
@@ -78,17 +78,17 @@ def explore_6days_indicators(country):
 
 # this method first prepares the query and connection for dataFrame Object
 # and then calls the plotting method for NewCases indicator
-# def explore_6days_newCases_farthest_neighbor(country):
-#     borders = get_border_countries(country, 1)
-#     columns_str = ['date_cases', 'NewCases', 'country_other']
-#     query = build_query(borders, columns_str)
-#     dbs = dbm()
-#     dbs.connection_db(schema.data_base_name)
-#     con = dbs.get_connection()
-#     df = DataAnalysis(query, con)
-#     # df.plot_6Days_3Indicators()
-#     dbs.close_connection()
-#
+def explore_6days_newCases_farthest_neighbor(country):
+    borders = get_border_countries(country, 1)
+    columns_str = ['NewCases']
+    query = build_query(borders, columns_str)
+    dbs = dbm()
+    dbs.connection_db(schema.data_base_name)
+    con = dbs.get_connection()
+    df = DataAnalysis(query, con)
+    df.plot_6Days_3Indicators()
+    dbs.close_connection()
+
 #
 # def explore_3days_DeathsPm_2farthest_neighbors(country, first_day):
 #     datetime.now() + datetime.timedelta(days=1)
