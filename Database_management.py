@@ -1,6 +1,5 @@
 # Yassine Ibhir & David Pizzolongo
 import mysql.connector
-import os
 
 import data_base_schema as schema
 
@@ -59,16 +58,17 @@ class My_DB_SQL:
     # calls other methods to create table and insert values in that table
     def populate_table(self, table_name, table_schema, list_tuples):
         sql_stm = ""
-        if table_name == 'corona_table':
+        if table_name == schema.corona_table_name:
             columns = len(list_tuples[0]) - 1
             columns_format = '(' + '%s,' * columns + '%s )'
             sql_stm = "insert into " + table_name + " values" + columns_format
-        elif table_name == 'country_borders_table':
+        elif table_name == schema.country_borders_table_name:
             sql_stm = "insert into " + table_name + " values(%s, %s, %s)"
 
         try:
             self.__create_db_table_keys(table_name, table_schema)
             self.__cursr.executemany(sql_stm, list_tuples)
+            print('Data is stored into ', table_name)
         except mysql.connector.Error as err:
             print('Cannot populate table {}'.format(err))
 
@@ -76,6 +76,7 @@ class My_DB_SQL:
             self.__conn.commit()
 
     # calls methods to create and select database and table.
+    # Uses data_base_schema class (schema)
     def __create_db_table_keys(self, table_name, table_schema):
 
         self.__create_db(schema.data_base_name)
@@ -83,3 +84,19 @@ class My_DB_SQL:
         self.__select_db(schema.data_base_name)
 
         self.__create_table(table_name, table_schema)
+
+    # returns the borders of a country based on the given criteria
+    def get_country_borders(self, column_str, tableName, criteria_str):
+
+        query_result = None
+        sql_stm = "select " + column_str + " from " + tableName + " " + criteria_str
+
+        try:
+            self.__cursr.execute(sql_stm)
+            query_result = self.__cursr.fetchall()
+        except mysql.connector.Error as err:
+            print('Cannot query from table {}'.format(err))
+        finally:
+            self.__conn.commit()
+
+        return query_result
