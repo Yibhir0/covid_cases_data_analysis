@@ -16,6 +16,7 @@ class DataAnalysis:
     # def plot 6 day indicators
     def plot_6Days_3Indicators(self, country):
         if not self.__df.empty:
+            self.impute_null_values()
             self.__df.set_index('date_cases', inplace=True)
             ax = self.__df.plot(kind='bar', title='6-days indicators evolution of ' + country, figsize=(8, 6))
             ax.set_xlabel("date")
@@ -27,6 +28,7 @@ class DataAnalysis:
 
     def plot_6Days_newCases(self, country):
         if not self.__df.empty:
+            self.impute_null_values()
             print(self.__df)
             cond1 = self.__df['country_other'] == country
             out1 = self.__df[cond1]
@@ -43,7 +45,8 @@ class DataAnalysis:
         else:
             print('Sorry no data for ', country)
 
-
+    def impute_null_values(self):
+        self.__df.fillna(100,inplace=True)
 # Module's methods for exploring and plotting
 
 # main method to ask for the day and country to explore by plotting the 3 graphs
