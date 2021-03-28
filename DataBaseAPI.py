@@ -1,6 +1,7 @@
 # Yassine Ibhir & David Pizzolongo
 
 import Database_management 
+import pandas as pd
 
 class DataBaseAPI:
     def __init__(self, db_conn):    
@@ -8,6 +9,7 @@ class DataBaseAPI:
         self.__list_query_tuples = [] 
         
     def fetch_query(self, query):
-                
+
+     
         
         
