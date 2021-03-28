@@ -1,8 +1,12 @@
 # Yassine Ibhir & David Pizzolongo
 
+# This file contains all database information such as keys to create tables and names of entities.
+
 data_base_name = 'covid_corona_db_DP_YI'
 
-corona_table = '''( date_cases date NOT NULL,  
+corona_table_name = 'corona_table'
+
+corona_table_keys = '''( date_cases date NOT NULL,  
                 position int NOT NULL,
                 country_other varchar(50) NOT NULL,
                 totalCases int NULL,
@@ -24,8 +28,9 @@ corona_table = '''( date_cases date NOT NULL,
                 testEveryXPeople int NULL,
                 PRIMARY KEY (country_other, date_cases) );'''
 
+country_borders_table_name = 'country_borders_table'
 
-country_borders_table = '''(country_other varchar(50) NOT NULL,
+country_borders_keys = '''(country_other varchar(50) NOT NULL,
                 border_country varchar(50) NULL,
                 distance decimal(10,2) NULL
                 ); '''
