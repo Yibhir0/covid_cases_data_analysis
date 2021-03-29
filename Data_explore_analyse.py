@@ -44,8 +44,7 @@ class DataAnalysis:
             if not out1.empty:
                 titlle = '6-days new cases comparison ' + country_and_borders[
                     len(country_and_borders) - 1] + " with neighbor " + \
-                         country_and_borders[
-                             0]
+                         country_and_borders[0]
                 labels.append("new cases - " + country_and_borders[len(country_and_borders) - 1])
                 ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
                                color='blue', width=0.3, rot=0)
@@ -64,6 +63,7 @@ class DataAnalysis:
             if ax is not None:
                 ax.legend(labels)
                 ax.set_xlabel("date")
+                ax.set_ylabel("New Cases")
                 plt.show()
         else:
             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
@@ -111,6 +111,7 @@ class DataAnalysis:
             if ax is not None:
                 ax.legend(labels)
                 ax.set_xlabel("date")
+                ax.set_ylabel("Deaths/1M pop")
                 plt.show()
         else:
             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
