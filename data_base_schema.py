@@ -34,4 +34,3 @@ country_borders_keys = '''(country_other varchar(50) NOT NULL,
                 border_country varchar(50) NULL,
                 distance decimal(10,2) NULL
                 ); '''
-

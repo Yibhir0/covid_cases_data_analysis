@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from Database_management import My_DB_SQL as dbm
 import data_base_schema as schema
 import Global_variables as gv
-import mysql.connector
 
 from ScrapeClass import get_date_of_file
 
@@ -31,56 +30,90 @@ class DataAnalysis:
             print('Sorry no data for ', country)
 
     def plot_6Days_newCases(self, country_and_borders):
+
         if not self.__df.empty:
+
+            if len(country_and_borders) < 2:
+                print(country_and_borders[len(country_and_borders) - 1], ' has no neighbours.........')
+            ax = None
+            labels = []
+
             self.__df.set_index(['date_cases'], inplace=True)
-            cond1 = self.__df['country_other'] == country_and_borders[1]
+            cond1 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 1]
             out1 = self.__df[cond1]
-            print(out1)
-            titlle = '6-days new cases comparison ' + country_and_borders[1] + " with neighbor " + country_and_borders[
-                0]
-            label1 = "new cases - " + country_and_borders[1]
-            ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
-                           color='blue', width=0.4, rot=0)
-            label2 = "new cases - " + country_and_borders[0]
+            if not out1.empty:
+                titlle = '6-days new cases comparison ' + country_and_borders[
+                    len(country_and_borders) - 1] + " with neighbor " + \
+                         country_and_borders[
+                             0]
+                labels.append("new cases - " + country_and_borders[len(country_and_borders) - 1])
+                ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
+                               color='blue', width=0.3, rot=0)
 
-            cond2 = self.__df['country_other'] == country_and_borders[0]
-            out2 = self.__df[cond2]
-            print(out2)
-            out2.plot(kind='bar', ax=ax, width=0.2, color='red', linewidth=3, alpha=.5, rot=0)
-            ax.legend([label1, label2])
-            ax.set_xlabel("date")
-            plt.show()
+            else:
+                print('Sorry no data for ', country_and_borders[len(country_and_borders) - 2])
 
-
+            if len(country_and_borders) > 1:
+                cond2 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 2]
+                out2 = self.__df[cond2]
+                if not out2.empty:
+                    out2.plot(kind='bar', ax=ax, width=0.2, color='red', linewidth=3, alpha=.5, rot=0)
+                    labels.append("new cases - " + country_and_borders[len(country_and_borders) - 2])
+                else:
+                    print('Sorry no data for ', country_and_borders[len(country_and_borders) - 2])
+            if ax is not None:
+                ax.legend(labels)
+                ax.set_xlabel("date")
+                plt.show()
         else:
             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
 
-    def plot_3days_deathPM(self,country_and_borders):
+    def plot_3days_deathPM(self, country_and_borders):
+
         if not self.__df.empty:
+            if len(country_and_borders) < 2:
+                print(country_and_borders[len(country_and_borders) - 1], ' has no neighbours.........')
+            ax = None
+            labels = []
+
             self.__df.set_index(['date_cases'], inplace=True)
-            cond1 = self.__df['country_other'] == country_and_borders[2]
+            cond1 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 1]
             out1 = self.__df[cond1]
-            print(out1)
-            titlle = '3-days Deaths1MP comparison ' + country_and_borders[2] + " with 2 neighbors "
-            label1 = "Deaths 1MP - " + country_and_borders[2]
-            ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
-                           color='blue', width=0.4, rot=0)
-            label2 = "Deaths 1MP - " + country_and_borders[1]
 
-            cond2 = self.__df['country_other'] == country_and_borders[1]
-            out2 = self.__df[cond2]
-            print(out2)
-            out2.plot(kind='bar', ax=ax, width=0.2, color='red', linewidth=3, alpha=.5, rot=0)
+            if not out1.empty:
+                titlle = '3-days DeathsPM comparison ' + country_and_borders[
+                    len(country_and_borders) - 1] + " with 2 neighbors "
+                labels.append("DeathsPM - " + country_and_borders[len(country_and_borders) - 1])
+                ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
+                               color='blue', width=0.3, rot=0)
 
-            label3 = "Deaths 1MP - " + country_and_borders[0]
+            else:
+                print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
 
-            cond3 = self.__df['country_other'] == country_and_borders[0]
-            out3 = self.__df[cond3]
-            print(out3)
-            out2.plot(kind='bar', ax=ax, width=0.1, color='green', linewidth=3, alpha=.5, rot=0)
-            ax.legend([label1, label2,label3])
-            ax.set_xlabel("date")
-            plt.show()
+            if len(country_and_borders) > 1:
+                cond2 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 2]
+                out2 = self.__df[cond2]
+                if not out2.empty:
+                    out2.plot(kind='bar', ax=ax, width=0.2, color='red', linewidth=3, alpha=.5, rot=0)
+                    labels.append("DeathsPM - " + country_and_borders[len(country_and_borders) - 2])
+                else:
+                    print('Sorry no data for ', country_and_borders[len(country_and_borders) - 2])
+
+            if len(country_and_borders) > 2:
+                cond3 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 3]
+                out3 = self.__df[cond3]
+                if not out3.empty:
+                    out3.plot(kind='bar', ax=ax, width=0.1, color='green', linewidth=3, alpha=.5, rot=0)
+                    labels.append("DeathsPM - " + country_and_borders[len(country_and_borders) - 3])
+                else:
+                    print('Sorry no data for ', country_and_borders[len(country_and_borders) - 3])
+
+            if ax is not None:
+                ax.legend(labels)
+                ax.set_xlabel("date")
+                plt.show()
+        else:
+            print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
 
 
 
@@ -115,11 +148,15 @@ def build_query(countries, columns_str):
     fields = ','.join(columns_str)
     query = None
     if type(countries) is list:
-        countries = tuple(countries)
-        query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other in {}'.format(
-            countries)
+        if len(countries) > 1:
+            countries = tuple(countries)
+            query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other in {}'.format(
+                countries)
+        else:
+            query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other = ' '"' + \
+                    countries[0] + '"'
     else:
-        query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other = ' '"' + countries + '"' + ';'
+        query = 'select ' + fields + ' from ' + schema.corona_table_name + ' where country_other = ' '"' + countries + '"'
     return query
 
 
@@ -157,7 +194,7 @@ def explore_3days_DeathsPm_2farthest_neighbors(country):
     file1 = dates[0]
     date1 = get_date_of_file(file1)
     date1 = dt.strptime(date1, '%Y-%m-%d')
-    date1 = str(date1 + td(days = 1))
+    date1 = str(date1 + td(days=1))
     file2 = dates[1]
     date2 = get_date_of_file(file2)
     borders = get_border_countries(country, 2)
@@ -169,3 +206,4 @@ def explore_3days_DeathsPm_2farthest_neighbors(country):
     con = dbs.get_connection()
     df = DataAnalysis(query, con)
     df.plot_3days_deathPM(borders)
+    dbs.close_connection()
