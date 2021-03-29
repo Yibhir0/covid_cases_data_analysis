@@ -19,8 +19,8 @@ class My_DB_SQL:
         try:
 
             self.__conn = mysql.connector.connect(host=self.__hst,
-                                                      user=self.__usr,
-                                                      passwd=self.__pwd)
+                                                  user=self.__usr,
+                                                  passwd=self.__pwd)
             self.__cursr = self.__conn.cursor()
             self.__create_db(db_name)
             self.__select_db(db_name)
@@ -89,7 +89,6 @@ class My_DB_SQL:
 
         query_result = None
         sql_stm = "select distinct " + column_str + " from " + tableName + " " + criteria_str
-
 
         try:
             self.__cursr.execute(sql_stm)
