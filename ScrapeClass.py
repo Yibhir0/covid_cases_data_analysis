@@ -96,7 +96,7 @@ def scrape_save_main_program():
             if second_file_to_scrape:
                 prepare_three_days_and_store(second_file_to_scrape)
             else:
-                print('No file matches the requirements ')
+                print('No file/other matches the requirements ')
         else:
             print('Not a valid day . Try again...')
 
@@ -126,7 +126,7 @@ def find_other_file_name_to_scrape(file_name_to_scrape):
 
     if filename_str1 in gv.HTML_FILES_LIST:
         return filename_str1
-    elif filename_str2 is gv.HTML_FILES_LIST:
+    elif filename_str2 in gv.HTML_FILES_LIST:
         return filename_str2
 
 
