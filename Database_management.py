@@ -88,7 +88,8 @@ class My_DB_SQL:
     def get_country_borders(self, column_str, tableName, criteria_str):
 
         query_result = None
-        sql_stm = "select " + column_str + " from " + tableName + " " + criteria_str
+        sql_stm = "select distinct " + column_str + " from " + tableName + " " + criteria_str
+
 
         try:
             self.__cursr.execute(sql_stm)
