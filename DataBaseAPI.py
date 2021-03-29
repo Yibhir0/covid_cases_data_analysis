@@ -31,5 +31,3 @@ class DataBaseAPI:
         return self.__query_result
 
 
-# get results of the specified columns of the specified table
-

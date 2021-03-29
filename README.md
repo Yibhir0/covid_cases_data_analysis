@@ -1,2 +1,0 @@
-# python_project1
-

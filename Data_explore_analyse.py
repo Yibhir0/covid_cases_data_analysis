@@ -21,7 +21,6 @@ class DataAnalysis:
     def plot_6Days_3Indicators(self, country):
 
         if not self.__df.empty:
-            self.impute_null_values()
             self.__df.set_index('date_cases', inplace=True)
             ax = self.__df.plot(kind='bar', title='6-days indicators evolution of ' + country, figsize=(8, 6))
             ax.set_xlabel("date")
@@ -33,7 +32,6 @@ class DataAnalysis:
 
     def plot_6Days_newCases(self, country_and_borders):
         if not self.__df.empty:
-            self.impute_null_values()
             self.__df.set_index(['date_cases'], inplace=True)
             cond1 = self.__df['country_other'] == country_and_borders[1]
             out1 = self.__df[cond1]
@@ -57,17 +55,13 @@ class DataAnalysis:
         else:
             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
 
-    def impute_null_values(self):
-        self.__df.fillna(100, inplace=True)
-
     def plot_3days_deathPM(self,country_and_borders):
         if not self.__df.empty:
-            self.impute_null_values()
             self.__df.set_index(['date_cases'], inplace=True)
             cond1 = self.__df['country_other'] == country_and_borders[2]
             out1 = self.__df[cond1]
             print(out1)
-            titlle = '3-days Deaths1MP comparison ' + country_and_borders[2] + " with 2 neighborS "
+            titlle = '3-days Deaths1MP comparison ' + country_and_borders[2] + " with 2 neighbors "
             label1 = "Deaths 1MP - " + country_and_borders[2]
             ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
                            color='blue', width=0.4, rot=0)
