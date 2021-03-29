@@ -60,11 +60,11 @@ def explore_saved_data_main_program():
 # get list of the country borders
 def get_border_countries(country, limit):
     dbms = dbm()
-    dbms.connection_db('covid_corona_db_dp_yi')
-    col = 'border_country'
-    table_borders = 'country_borders_table'
+    dbms.connection_db(schema.data_base_name)
+    colBorder = 'border_country'
+    table_borders = schema.country_borders_table_name
     criteria = ' where country_other = "' + country + '"   order by distance desc limit ' + str(limit) + ';'
-    country_border = dbms.get_country_borders(col, table_borders, criteria)
+    country_border = dbms.get_country_borders(colBorder, table_borders, criteria)
     dbms.close_connection()
     countries = [item for bor in country_border for item in bor]
     countries.append(country)  # add the chosen country to the list of border countries
