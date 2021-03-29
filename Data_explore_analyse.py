@@ -32,10 +32,12 @@ class DataAnalysis:
     def plot_6Days_newCases(self, country_and_borders):
 
         if not self.__df.empty:
+
             if len(country_and_borders) < 2:
                 print(country_and_borders[len(country_and_borders) - 1], ' has no neighbours.........')
             ax = None
             labels = []
+
             self.__df.set_index(['date_cases'], inplace=True)
             cond1 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 1]
             out1 = self.__df[cond1]
@@ -73,9 +75,11 @@ class DataAnalysis:
                 print(country_and_borders[len(country_and_borders) - 1], ' has no neighbours.........')
             ax = None
             labels = []
+
             self.__df.set_index(['date_cases'], inplace=True)
             cond1 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 1]
             out1 = self.__df[cond1]
+
             if not out1.empty:
                 titlle = '3-days DeathsPM comparison ' + country_and_borders[
                     len(country_and_borders) - 1] + " with 2 neighbors "
@@ -110,6 +114,7 @@ class DataAnalysis:
                 plt.show()
         else:
             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
+
 
 
 # Module's methods for exploring and plotting
