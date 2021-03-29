@@ -15,18 +15,17 @@ class My_DB_SQL:
 
     # connect to the given database or create a new connection
     def connection_db(self, db_name):
+
         try:
-            if db_name == None:
-                self.__conn = mysql.connector.connect(host=self.__hst,
+
+            self.__conn = mysql.connector.connect(host=self.__hst,
                                                       user=self.__usr,
                                                       passwd=self.__pwd)
-
-            else:
-                self.__conn = mysql.connector.connect(host=self.__hst,
-                                                      user=self.__usr,
-                                                      passwd=self.__pwd,
-                                                      database=db_name)
             self.__cursr = self.__conn.cursor()
+            self.__create_db(db_name)
+            self.__select_db(db_name)
+
+
         except mysql.connector.Error as err:
             print('problem with database {}'.format(err))
 
