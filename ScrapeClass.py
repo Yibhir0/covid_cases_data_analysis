@@ -83,7 +83,6 @@ def clean_save_json():
 
 
 # main method to scrape and save the html data of 3 days into database
-
 def scrape_save_main_program():
     file_name_to_scrape = None
     while not file_name_to_scrape:

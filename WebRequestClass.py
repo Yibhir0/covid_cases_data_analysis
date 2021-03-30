@@ -23,21 +23,21 @@ class WebRequestClass:
         return self.__html_binary
 
 
-# nested methods makes a request  and stores the html files locally.
+#  makes a request  and stores the html files locally.
 def make_request_main_program():
-    # make a request
-    def url_request():
-        req = WebRequestClass(gv.URL)  # request to the web which will happen twice
-        html_bytes = req.get_html_binary()  # get_html bytes
-        return html_bytes
-
-    # save_to_local saves a local file containing the html bytes
-    def save_to_local(html_bits):
-        filename = gv.HTML_DIRECTORY + "local_page" + str(date.today()) + ".html"
-        html_file = FileIO(filename)
-        html_file.save_to_local_file(html_bits)
-
     html_code = url_request()
     save_to_local(html_code)
+# make a request
+def url_request():
+    req = WebRequestClass(gv.URL)  # request to the web which will happen twice
+    html_bytes = req.get_html_binary()  # get_html bytes
+    return html_bytes
+
+# save_to_local saves a local file containing the html bytes
+def save_to_local(html_bits):
+    filename = gv.HTML_DIRECTORY + "local_page" + str(date.today()) + ".html"
+    html_file = FileIO(filename)
+    html_file.save_to_local_file(html_bits)
+
 
 # ---------------------------------------------------- end of request methods

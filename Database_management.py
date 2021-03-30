@@ -8,9 +8,9 @@ import data_base_schema as schema
 class My_DB_SQL:
 
     def __init__(self):
-        self.__usr = os.environ['MYSQL_USR']
+        self.__usr = 'root'
         self.__hst = 'localhost'
-        self.__pwd = os.environ['MYSQL_PWD']
+        self.__pwd = 'Flous101992'
         self.__conn = None
         self.__cursr = None
 
