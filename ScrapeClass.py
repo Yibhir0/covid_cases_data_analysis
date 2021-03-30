@@ -82,8 +82,8 @@ def clean_save_json():
     write_to_DB(schema.country_borders_table_name, schema.country_borders_keys, country_borders)
 
 
-# main method to scrape and save the html data of 3 days into database
-
+# This is the main function responsible of scraping and saving the html data of 3 days into the database.
+# While validating user input, it ...
 def scrape_save_main_program():
     file_name_to_scrape = None
     while not file_name_to_scrape:
@@ -101,7 +101,9 @@ def scrape_save_main_program():
             print('Not a valid day . Try again...')
 
 
-# This method make up the 3 days and store the data accordingly
+# This method calculates and stores the 3 days in a tuple. It then invokes scrape_all_tables to 
+# format the html data into a list of tuples and uses this list, along with the table name and schema,
+# to create and populate a new table in the database.  
 def prepare_three_days_and_store(file_name_to_scrape):
     file_date = get_date_of_file(file_name_to_scrape)
     today = dt.strptime(file_date, '%Y-%m-%d')
@@ -146,7 +148,7 @@ def get_html_local_binary(filename):
     return html_binary
 
 
-# This method will use  ScrapeClass to scrape 3-days worth
+# This method will use ScrapeClass to scrape 3-days worth
 # of data from the provided html bytes.
 def scrape_all_tables(html_bytes, three_days):
     scrape_obj = ScrapeClass(html_bytes)
@@ -155,7 +157,8 @@ def scrape_all_tables(html_bytes, three_days):
     return final_corona_data
 
 
-# write_to_Db will use My_DB_SQL class to create and store data
+# write_to_DB uses an object of the My_DB_SQL class to establish a connection with a new database,
+# store the clean data into a table and close the connection once everything is committed.
 def write_to_DB(table, dbSchema, list_clean_tuples):
     dbs_obj = dbm()
     dbs_obj.connection_db(schema.data_base_name)
@@ -163,11 +166,13 @@ def write_to_DB(table, dbSchema, list_clean_tuples):
     dbs_obj.close_connection()
 
 
-# checks if html file of a specific day exist and returns it
+# This method verifies if the html file of a specific day exists in the current list of saved files
+# and if so returns it.
 def get_file_to_scrape(day):
     for file in gv.HTML_FILES_LIST:
         startIndex = file.rfind("-") + 1
         endIndex = file.rfind(".")
+        #removes the month and year portions of the date
         file_day = file[startIndex: endIndex]
         if file_day == day:
             return file

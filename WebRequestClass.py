@@ -39,5 +39,3 @@ def make_request_main_program():
 
     html_code = url_request()
     save_to_local(html_code)
-
-# ---------------------------------------------------- end of request methods

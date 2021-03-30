@@ -1,6 +1,6 @@
 # Yassine Ibhir & David Pizzolongo
 
-# This file contains all database information such as keys to create tables and names of entities.
+# This file contains all database information such as keys to create tables and names of entities. 
 
 data_base_name = 'covid_corona_db_DP_YI'
 
