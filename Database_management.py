@@ -7,11 +7,11 @@ import data_base_schema as schema
 
 class My_DB_SQL:
 
-    #holds private information and initializes database connection and cursor as None
+    # holds private information and initializes database connection and cursor as None
     def __init__(self):
-        self.__usr = os.environ['MYSQL_USR']
+        self.__usr = 'root'
         self.__hst = 'localhost'
-        self.__pwd = os.environ['MYSQL_PWD']
+        self.__pwd = 'Flous101992'
         self.__conn = None
         self.__cursr = None
 
@@ -20,15 +20,12 @@ class My_DB_SQL:
     def connection_db(self, db_name):
 
         try:
-
             self.__conn = mysql.connector.connect(host=self.__hst,
                                                   user=self.__usr,
                                                   passwd=self.__pwd)
             self.__cursr = self.__conn.cursor()
             self.__create_db(db_name)
             self.__select_db(db_name)
-
-
         except mysql.connector.Error as err:
             print('problem with database {}'.format(err))
 
@@ -64,7 +61,7 @@ class My_DB_SQL:
     def populate_table(self, table_name, table_schema, list_tuples):
         sql_stm = ""
         if table_name == schema.corona_table_name:
-            #number of columns minus one
+            # number of columns minus one
             columns = len(list_tuples[0]) - 1
             columns_format = '(' + '%s,' * columns + '%s )'
             sql_stm = "insert into " + table_name + " values" + columns_format
@@ -78,7 +75,7 @@ class My_DB_SQL:
         except mysql.connector.Error as err:
             print('Cannot populate table {}'.format(err))
 
-        #once it is finished inserting, it commits the changes
+        # once it is finished inserting, it commits the changes
         finally:
             self.__conn.commit()
 
