@@ -6,13 +6,14 @@ import data_base_schema as schema
 from FileIO import FileIO
 from Database_management import My_DB_SQL as dbm
 
+
 # This class takes care of scraping all 3 days worth of table data from the html page,
 # removes special characters, and casts the numbers to float or int.
 class ScrapeClass:
 
     def __init__(self, binary_html):
         self.__binary_html = binary_html
-        #makes a BeautifulSoup object
+        # makes a BeautifulSoup object
         self.__bs_obj = bs(self.__binary_html, features='html.parser')
         self.__lst_unclean_stats = None
         self.__lst_clean_stats = None
@@ -50,7 +51,7 @@ class ScrapeClass:
 
             for td_field in all_td_row:
                 td_text = td_field.text
-                #all possible empty values
+                # all possible empty values
                 if len(td_text) == 0 or td_text == ' ' or td_text == "N/A":
                     td_text = None
                 else:
@@ -59,7 +60,7 @@ class ScrapeClass:
                     # cast to the appropriate type
                     temp_text = None  # backup value in case an exception is thrown
                     try:
-                        #only if number contains a decimal point, its type is casted to decimal 
+                        # only if number contains a decimal point, its type is casted to decimal
                         if td_text.find('.') > -1:
                             temp_text = td_text
                             td_text = float(td_text)
@@ -67,10 +68,10 @@ class ScrapeClass:
                             temp_text = td_text
                             td_text = int(td_text)
                     except ValueError:
-                        #text is a string 
+                        # text is a string
                         td_text = temp_text
-                
-                #appends the values of each row to their proper date
+
+                # appends the values of each row to their proper date
                 row_td_fields.append(td_text)
 
             self.__lst_clean_stats.append(row_td_fields)
@@ -97,6 +98,7 @@ def clean_save_json():
 
 # This is the main function responsible of scraping and saving the html data of 3 days into the database.
 # While validating user input, it ...
+
 def scrape_save_main_program():
     file_name_to_scrape = None
     while not file_name_to_scrape:
@@ -185,7 +187,7 @@ def get_file_to_scrape(day):
     for file in gv.HTML_FILES_LIST:
         startIndex = file.rfind("-") + 1
         endIndex = file.rfind(".")
-        #removes the month and year portions of the date
+        # removes the month and year portions of the date
         file_day = file[startIndex: endIndex]
         if file_day == day:
             return file

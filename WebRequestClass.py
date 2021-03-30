@@ -5,6 +5,7 @@ import Global_variables as gv
 
 from FileIO import FileIO
 
+
 # The WebRequestClass makes a HTTP request to the live coronavirus facts page and stores the html_binary
 # of the current day in a unique file that can later be used to scrape. 
 class WebRequestClass:
@@ -26,20 +27,21 @@ class WebRequestClass:
         return self.__html_binary
 
 
-# Called by the main method of the application, this method uses
-# nested methods to make a request and store the html files locally.
+#  makes a request  and stores the html files locally.
 def make_request_main_program():
-    def url_request():
-        req = WebRequestClass(gv.URL)  # request to the web which will happen twice
-        html_bytes = req.get_html_binary()  
-        return html_bytes
-
-    # save_to_local saves a local file containing the html bytes in a local_html folder
-    def save_to_local(html_bits):
-        filename = gv.HTML_DIRECTORY + "local_page" + str(date.today()) + ".html"
-        html_file = FileIO(filename)
-        html_file.save_to_local_file(html_bits)
-
-    # calls both methods
     html_code = url_request()
     save_to_local(html_code)
+
+
+# make a request
+def url_request():
+    req = WebRequestClass(gv.URL)  # request to the web which will happen twice
+    html_bytes = req.get_html_binary()  # get_html bytes
+    return html_bytes
+
+
+# save_to_local saves a local file containing the html bytes
+def save_to_local(html_bits):
+    filename = gv.HTML_DIRECTORY + "local_page" + str(date.today()) + ".html"
+    html_file = FileIO(filename)
+    html_file.save_to_local_file(html_bits)
