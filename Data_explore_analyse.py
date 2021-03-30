@@ -50,9 +50,9 @@ class DataAnalysis:
             return -1
 
     '''
-    This method changes the column names and the values to be compatible with plotting.
+    This method changes the column names and the values of the dataframe to be compatible with plotting.
     It creates a dictionary with date_cases as indexes and a list of column entries as values for that day
-    it also creates the columns of that Data frame.It sets the value of the original that frame to the new generated one
+    it also creates the columns of the new Data frame.It sets the value of the original dataframe to the new generated one.
     '''
 
     def reformat_df_list(self, borders, val):
@@ -84,16 +84,19 @@ class DataAnalysis:
             plt.xlabel("Date")
             plt.ylabel("Deaths 1/M pop")
             plt.show()
+
         else:
             print('Sorry No data found for plotting  ', country)
 
     def plot_6days(self, country):
         if not self.__df.empty:
+
             self.__df.plot(kind='bar', width=0.3, rot=0)
-            plt.title(f'6-Days New Cases Comparison - {country} with longest Neighbor')
+            plt.title(f'6-Days New Cases Comparison - {country} with longest border Neighbor')
             plt.xlabel("Date")
             plt.ylabel("New cases")
             plt.show()
+
         else:
             print('Sorry No data found for plotting', country)
 
