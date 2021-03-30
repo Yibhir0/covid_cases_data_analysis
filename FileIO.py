@@ -21,8 +21,8 @@ class FileIO:
         finally:
             self.__file_obj.close()
 
-    # format_json_to_tuples applies a format to the json data (countries, combined with borders and the distance between them)
-    # and generates a list of tuples for the country_borders table
+    # format_json_to_tuples applies a format to the json dictionary data (countries, combined with borders and their distance)
+    # and generates a list of tuples for the country_borders table.
     def format_json_to_tuples(self):
         countries_border = self.__data_file_result
         self.__data_file_result = []  # list of tuples

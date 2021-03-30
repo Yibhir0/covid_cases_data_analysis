@@ -3,16 +3,19 @@ from datetime import date
 from urllib.request import Request, urlopen
 import Global_variables as gv
 
-# request the page and stores the binary_html
 from FileIO import FileIO
 
-
+# The WebRequestClass makes a HTTP request to the live coronavirus facts page and stores the html_binary
+# of the current day in a unique file that can later be used to scrape. 
 class WebRequestClass:
 
     def __init__(self, url):
         self.__url = url
         self.__html_binary = None
 
+    # This function makes a single request to the website and returns the bytes 
+    # from the HTTP Response object. Any network or other related-errors are caught
+    # and an appropriate message is displayed. 
     def get_html_binary(self):
         try:
             req = Request(self.__url, headers={'user-agent': 'Mozilla/5.0'})
@@ -23,19 +26,20 @@ class WebRequestClass:
         return self.__html_binary
 
 
-# nested methods makes a request  and stores the html files locally.
+# Called by the main method of the application, this method uses
+# nested methods to make a request and store the html files locally.
 def make_request_main_program():
-    # make a request
     def url_request():
         req = WebRequestClass(gv.URL)  # request to the web which will happen twice
-        html_bytes = req.get_html_binary()  # get_html bytes
+        html_bytes = req.get_html_binary()  
         return html_bytes
 
-    # save_to_local saves a local file containing the html bytes
+    # save_to_local saves a local file containing the html bytes in a local_html folder
     def save_to_local(html_bits):
         filename = gv.HTML_DIRECTORY + "local_page" + str(date.today()) + ".html"
         html_file = FileIO(filename)
         html_file.save_to_local_file(html_bits)
 
+    # calls both methods
     html_code = url_request()
     save_to_local(html_code)

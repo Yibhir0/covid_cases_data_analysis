@@ -6,17 +6,22 @@ import data_base_schema as schema
 from FileIO import FileIO
 from Database_management import My_DB_SQL as dbm
 
-
+# This class takes care of scraping all 3 days worth of table data from the html page,
+# removes special characters, and casts the numbers to float or int.
 class ScrapeClass:
 
     def __init__(self, binary_html):
         self.__binary_html = binary_html
+        #makes a BeautifulSoup object
         self.__bs_obj = bs(self.__binary_html, features='html.parser')
         self.__lst_unclean_stats = None
         self.__lst_clean_stats = None
         self.__combined_tables_clean_stats = []
         self.__lst_clean_tuples = []
 
+    # scrape_tables iterates over bs_obj, finds the table rows containing the statistics
+    # and appends them to the list of unclean stats. This list is then cleaned for each day 
+    # and is added to the final result, the combined_tables_clean_stats.
     def scrape_tables(self, table_days):
 
         table_list = self.__bs_obj.find_all('table')
@@ -26,13 +31,15 @@ class ScrapeClass:
             day_table = table_list[tableIndex].find('tbody')
             day_rows = day_table.find_all('tr')
 
-            # removes all rows with classes (the total_row_world row_continent)
+            # excludes all rows with classes (the total_row_world row_continent)
             for trow in day_rows:
                 if not trow.has_attr('class'):
                     self.__lst_unclean_stats.append(trow)
             self.__arrange_Stats(table_days[tableIndex])
             self.__combined_tables_clean_stats = self.__combined_tables_clean_stats + self.__lst_clean_stats
 
+    # The arrange_Stats method adds data from the specific day to lst_clean_stats, by retrieving 
+    # the text of every row, casting empty data to None, and converting the numbers to floats or ints.
     def __arrange_Stats(self, day):
         self.__lst_clean_stats = []
         for row in self.__lst_unclean_stats:
@@ -43,6 +50,7 @@ class ScrapeClass:
 
             for td_field in all_td_row:
                 td_text = td_field.text
+                #all possible empty values
                 if len(td_text) == 0 or td_text == ' ' or td_text == "N/A":
                     td_text = None
                 else:
@@ -51,6 +59,7 @@ class ScrapeClass:
                     # cast to the appropriate type
                     temp_text = None  # backup value in case an exception is thrown
                     try:
+                        #only if number contains a decimal point, its type is casted to decimal 
                         if td_text.find('.') > -1:
                             temp_text = td_text
                             td_text = float(td_text)
@@ -58,12 +67,16 @@ class ScrapeClass:
                             temp_text = td_text
                             td_text = int(td_text)
                     except ValueError:
+                        #text is a string 
                         td_text = temp_text
-
+                
+                #appends the values of each row to their proper date
                 row_td_fields.append(td_text)
 
             self.__lst_clean_stats.append(row_td_fields)
 
+    # converts the inner lists of the combined tables data to tuples and 
+    # returns lst_clean_tuples. 
     def get_lst_tuples(self):
         for lst_clean in self.__combined_tables_clean_stats:
             tup_clean = tuple(lst_clean)
@@ -179,7 +192,9 @@ def get_file_to_scrape(day):
     return None
 
 
-# use_json will get a list of data of the json file. This methods runs first.
+# use_json gets a list of data from the json file, that is formatted 
+# in accordance with its table in the database. Invoked by clean_save_json,
+# this method is run first as part of the main program. 
 def use_json():
     json_obj = FileIO(gv.JSON_DIRECTORY)
     json_obj.readJsonFile()
