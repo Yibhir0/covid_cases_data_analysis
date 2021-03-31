@@ -27,20 +27,20 @@ class WebRequestClass:
         return self.__html_binary
 
 
-#  makes a request  and stores the html files locally.
+# Called by the main method of the application, it makes a request and stores the html files locally. 
 def make_request_main_program():
     html_code = url_request()
     save_to_local(html_code)
 
 
-# make a request
+# makes a request
 def url_request():
     req = WebRequestClass(gv.URL)  # request to the web which will happen twice
     html_bytes = req.get_html_binary()  # get_html bytes
     return html_bytes
 
 
-# save_to_local saves a local file containing the html bytes
+# save_to_local saves a local file containing the html bytes to the local_html folder
 def save_to_local(html_bits):
     filename = gv.HTML_DIRECTORY + "local_page" + str(date.today()) + ".html"
     html_file = FileIO(filename)

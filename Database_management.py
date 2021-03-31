@@ -9,9 +9,9 @@ class My_DB_SQL:
 
     # holds private information and initializes database connection and cursor as None
     def __init__(self):
-        self.__usr = 'root'
+        self.__usr = os.environ['MYSQL_USR']
         self.__hst = 'localhost'
-        self.__pwd = 'Flous101992'
+        self.__pwd = os.environ['MYSQL_PWD']
         self.__conn = None
         self.__cursr = None
 
@@ -80,7 +80,7 @@ class My_DB_SQL:
             self.__conn.commit()
 
     # calls methods to create and select database and table.
-    # Uses data_base_schema class (schema)
+    # Uses data_base_schema class (schema).
     def __create_db_table_keys(self, table_name, table_schema):
 
         self.__create_db(schema.data_base_name)

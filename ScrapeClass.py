@@ -97,8 +97,8 @@ def clean_save_json():
 
 
 # This is the main function responsible of scraping and saving the html data of 3 days into the database.
-# While validating user input, it ...
-
+# While validating user input, it gets the corresponding filename from the file system, gets the 
+# second filename and calls prepare_three_days_and_store to scrape and format the table data. 
 def scrape_save_main_program():
     file_name_to_scrape = None
     while not file_name_to_scrape:

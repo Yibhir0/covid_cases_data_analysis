@@ -9,7 +9,8 @@ import Global_variables as gv
 
 from ScrapeClass import get_date_of_file
 
-
+# This class is responsible for creating and plotting a dataframe that uses 
+# the country the user provided and its farthest borders.  
 class DataAnalysis:
 
     def __init__(self, query, conn):
@@ -17,11 +18,13 @@ class DataAnalysis:
         self.__df = pd.read_sql_query(query, conn)
 
         if not self.__df.empty:
+            #sets labels for the x axis to be the dates
             self.__df.set_index(['date_cases'], inplace=True)
 
         self.__df_list = []  # This will contain a list of dataframes to merge and plot
 
-    # def plot 6 day indicators
+    # This function plots the New Cases, New Deaths and New Recovered pertaining 
+    # to the single country.
     def plot_6Days_3Indicators(self, country):
 
         if not self.__df.empty:
@@ -34,14 +37,15 @@ class DataAnalysis:
             else:
                 print('Sorry No data found for plotting  ', country)
 
-    # This method generates a list of dataframes and sets the value to object list
+    # This method generates a list of dataframes matching every country in country_border
+    # and sets the value to object list.
     def generate_list_df(self, country_border):
         for country in country_border:
             cond = self.__df['country_other'] == country
             out = self.__df[cond]
             self.__df_list.append(out)
 
-    # returns the index of first occurrence of a full dataframe else -1
+    # returns the index of the first occurrence of a complete dataframe else -1.
     def __get_full_datFrame_index(self):
 
         for i in range(0, len(self.__df_list)):
@@ -49,23 +53,27 @@ class DataAnalysis:
                 return i
             return -1
 
-    '''
-    This method changes the column names and the values of the dataframe to be compatible with plotting.
-    It creates a dictionary with date_cases as indexes and a list of column entries as values for that day
-    it also creates the columns of the new Data frame.It sets the value of the original dataframe to the new generated one.
-    '''
-
+    
+    # This method changes the column names and the values of the dataframe to be compatible with plotting.
+    # It creates a dictionary with date_cases as indexes and a list of column entries as values for that day.
+    # It also creates the columns of the new Data frame. It sets the value of the original dataframe to the new generated one.
     def reformat_df_list(self, borders, val):
         iDf = self.__get_full_datFrame_index()
         if iDf != -1:
             data_dict = {}
             colmns = []
             len_row = len(borders)
+            #iterates over each row in the list
             for i, row in self.__df_list[0].iterrows():
                 rows = []
+                #for each border, gets the required information if it is not empty
                 for j in range(0, len(borders)):
                     if not self.__df_list[j].empty:
+                        #retrieves NewCases and Deaths/1M values at the index of the row
                         rows.append(self.__df_list[j].loc[i][val])
+                        
+                        #ensures that the column list has the same length as the number of rows,
+                        #applies the format that appears in the legend
                         if len(colmns) < len_row:
                             colmns.append(val + '-' + borders[j])
                     else:
@@ -75,8 +83,10 @@ class DataAnalysis:
             # dataFrame to plot
             self.__df = pd.DataFrame.from_dict(data_dict, orient='index', columns=colmns)
         else:
+            #country not found
             print('No Data available for ------>', borders)
 
+    #plots the bar chart for DeathsPM, in comparison with at most 3 of its neighbors
     def plot_3days(self, country):
         if not self.__df.empty:
             self.__df.plot(kind='bar', width=0.3, rot=0)
@@ -88,6 +98,7 @@ class DataAnalysis:
         else:
             print('Sorry No data found for plotting  ', country)
 
+    #plots the bar chart for New Cases, in comparison with its most distanced neighbor
     def plot_6days(self, country):
         if not self.__df.empty:
 
@@ -103,7 +114,7 @@ class DataAnalysis:
 
 # Module's methods for exploring and plotting
 
-# main method to ask for the day and country to explore by plotting the 3 graphs
+# main method that asks for the day and country to explore and plot the 3 graphs
 def explore_saved_data_main_program():
     choice = input('Enter the name of the country you want to explore?')
     country = choice.capitalize()
@@ -112,21 +123,25 @@ def explore_saved_data_main_program():
     explore_3days_DeathsPm_longest_neighbors(country)
 
 
-# get list of the country borders
+# gets the list of the country_borders with a set limit
 def get_border_countries(country, limit):
     dbms = dbm()
     dbms.connection_db(schema.data_base_name)
     colBorder = 'border_country'
     table_borders = schema.country_borders_table_name
     criteria = ' where country_other = "' + country + '"   order by distance desc limit ' + str(limit) + ';'
+    #gets list of tuples from the query
     country_border = dbms.get_country_borders(colBorder, table_borders, criteria)
+    #computes a list of the borders (the item in each tuple result)
     countries = [item for bor in country_border for item in bor]
-    countries.append(country)  # add the chosen country to the list of border countries
+    countries.append(country)  # adds the chosen country to the list of border countries
     dbms.close_connection()
     return countries
 
 
-# build a query that we will with Data Frame
+# builds an SQL query that will represent the data in the Data Frame. The fields are 
+# combined with a comma as separator and are selected from the corona_table, where the data
+# matches the country or countries in question.
 def build_query(countries, columns_str):
     fields = ','.join(columns_str)
     query = ''
@@ -143,9 +158,8 @@ def build_query(countries, columns_str):
     return query
 
 
-# this method first prepares the query and connection for dataFrame Object
-# and then calls the plotting method for 6Days Indicators
-
+# This method first prepares the query and connection for the DataFrame object
+# and then calls the plotting method for 6Days Indicators.
 def explore_6days_indicators(country):
     columns_str = ['date_cases', 'NewCases', 'NewDeaths', 'NewRecovered']
     query = build_query(country, columns_str)
@@ -157,9 +171,8 @@ def explore_6days_indicators(country):
     dbs.close_connection()
 
 
-# this method first prepares the query and connection for dataFrame Object
-# and then calls the plotting method for NewCases indicator
-
+# This method first prepares the query and connection for the DataAnalysis object
+# and then calls the plotting method for NewCases indicator.
 def explore_6days_newCases_longest_neighbor(country):
     country_and_borders = get_border_countries(country, 1)
     columns_str = ['date_cases', 'NewCases', 'country_other']
@@ -173,15 +186,19 @@ def explore_6days_newCases_longest_neighbor(country):
     df.plot_6days(country)
     dbs.close_connection()
 
-
+# This method calculates the first 3 days of the second file (March 22-24), gets
+# the 3 longuest neighbors and then proceeds to plot the df representing the Deaths Per Million
+# from these countries during the 3 days. 
 def explore_3days_DeathsPm_longest_neighbors(country):
     dates = gv.HTML_FILES_LIST
     file1 = dates[0]
+    #sets full date of the file to date1
     date1 = get_date_of_file(file1)
     date1 = dt.strptime(date1, '%Y-%m-%d')
     date1 = str(date1 + td(days=1))
     file2 = dates[1]
     date2 = get_date_of_file(file2)
+    #gets longuest country borders (maximum 3) and the country itself
     borders = get_border_countries(country, 3)
     columns_str = ['date_cases', 'deathsPM', 'country_other']
     query = build_query(borders, columns_str)
@@ -190,94 +207,9 @@ def explore_3days_DeathsPm_longest_neighbors(country):
     dbs.connection_db(schema.data_base_name)
     con = dbs.get_connection()
     df = DataAnalysis(query, con)
+    #sets starting df list
     df.generate_list_df(borders)
+    #sets final df with deathsPM numbers and plots it 
     df.reformat_df_list(borders, 'deathsPM')
     df.plot_3days(country)
     dbs.close_connection()
-
-# def plot_6Days_newCases(self, country_and_borders):
-#
-#     if not self.__df.empty:
-#
-#         if len(country_and_borders) < 2:
-#             print(country_and_borders[len(country_and_borders) - 1], ' has no neighbours.........')
-#         ax = None
-#         labels = []
-#
-#         # self.__df.set_index(['date_cases'], inplace=True)
-#         cond1 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 1]
-#         out1 = self.__df[cond1]
-#         if not out1.empty:
-#             titlle = '6-days new cases comparison ' + country_and_borders[
-#                 len(country_and_borders) - 1] + " with neighbor " + \
-#                      country_and_borders[
-#                          0]
-#             labels.append("new cases - " + country_and_borders[len(country_and_borders) - 1])
-#             ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
-#                            color='blue', width=0.3, rot=0)
-#
-#         else:
-#             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 2])
-#
-#         if len(country_and_borders) > 1:
-#             cond2 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 2]
-#             out2 = self.__df[cond2]
-#             if not out2.empty:
-#                 out2.plot(kind='bar', ax=ax, width=0.2, color='red', linewidth=3, alpha=.5, rot=0)
-#                 labels.append("new cases - " + country_and_borders[len(country_and_borders) - 2])
-#             else:
-#                 print('Sorry no data for ', country_and_borders[len(country_and_borders) - 2])
-#         if ax is not None:
-#             ax.legend(labels)
-#             ax.set_xlabel("date")
-#             plt.show()
-#     else:
-#         print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
-#
-# def plot_3days_deathPM(self, country_and_borders):
-#
-#     if not self.__df.empty:
-#         print(self.__df)
-#         if len(country_and_borders) < 2:
-#             print(country_and_borders[len(country_and_borders) - 1], ' has no neighbours.........')
-#         ax = None
-#         labels = []
-#
-#         self.__df.set_index(['date_cases'], inplace=True)
-#         cond1 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 1]
-#         out1 = self.__df[cond1]
-#
-#         if not out1.empty:
-#             titlle = '3-days DeathsPM comparison ' + country_and_borders[
-#                 len(country_and_borders) - 1] + " with 2 neighbors "
-#             labels.append("DeathsPM - " + country_and_borders[len(country_and_borders) - 1])
-#             ax = out1.plot(kind='bar', title=titlle, figsize=(8, 6),
-#                            color='blue', width=0.3, rot=0)
-#
-#         else:
-#             print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
-#
-#         if len(country_and_borders) > 1:
-#             cond2 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 2]
-#             out2 = self.__df[cond2]
-#             if not out2.empty:
-#                 out2.plot(kind='bar', ax=ax, width=0.2, color='red', linewidth=3, alpha=.5, rot=0)
-#                 labels.append("DeathsPM - " + country_and_borders[len(country_and_borders) - 2])
-#             else:
-#                 print('Sorry no data for ', country_and_borders[len(country_and_borders) - 2])
-#
-#         if len(country_and_borders) > 2:
-#             cond3 = self.__df['country_other'] == country_and_borders[len(country_and_borders) - 3]
-#             out3 = self.__df[cond3]
-#             if not out3.empty:
-#                 out3.plot(kind='bar', ax=ax, width=0.1, color='green', linewidth=3, alpha=.5, rot=0)
-#                 labels.append("DeathsPM - " + country_and_borders[len(country_and_borders) - 3])
-#             else:
-#                 print('Sorry no data for ', country_and_borders[len(country_and_borders) - 3])
-#
-#         if ax is not None:
-#             ax.legend(labels)
-#             ax.set_xlabel("date")
-#             plt.show()
-#     else:
-#         print('Sorry no data for ', country_and_borders[len(country_and_borders) - 1])
