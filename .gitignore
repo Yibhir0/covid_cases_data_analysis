@@ -11,6 +11,7 @@ env/
 venv/
 ENV/
 .venv/
+covid-env
 
 # OS files
 .DS_Store
