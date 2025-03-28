@@ -12,22 +12,27 @@ Built using an Object-Oriented Programming (OOP) approach, the project is modula
 
 ```bash
 git clone https://github.com/Yibhir0/covid_cases_data_analysis.git
-cd covid_cases_data_analysis
+cd covid_cases_data_analysis 
 
-### 2 Start MySQL with Docker
+```
+
+### 2 Start MySQL with Docker   
 
 ```bash
 docker-compose up -d
+```
 
-### 3 Set Up the Python Environment
+### 3 Set Up the Python Environment 
 
 ```bash
 python -m venv env
 source env/bin/activate        # On Windows: .\env\Scripts\activate
 pip install -r requirements.txt
+```
 
-### 4 How to Run the Program
+### 4 How to Run the Program 
 
 ```bash
-python DriverClass.py
+python DriverClass.py 
+```
 
