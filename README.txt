@@ -1,15 +1,33 @@
-Using an OOP approach, this project consists of html request, scraping, file io, database and data analysis classes. It also contains files that hold global variables 
-(url, directory listing of local_html and the location of the json file) and the database schemas for both tables. These files are saved in their
-respective folders (local_html and countries_json). 
+# 🦠 COVID-19 Data Analysis with Python & MySQL
 
-By running the DriverClass, the main method will ask the user for input to scrape, explore a country, make a request for the current day or exit. Based on this 
-response, it will call the appropriate method (scrape_save_main_program(), explore_saved_data_main_program(), make_request_main_program()). 
+This project performs a full pipeline of COVID-19 case analysis using Python, web scraping, and MySQL for data storage. It retrieves and processes pandemic data from HTML sources, stores structured records in a MySQL database, and generates meaningful visualizations to uncover patterns such as infection trends, recovery rates, and country-level comparisons.
 
-The scrape_save_main_program method invokes a method to scrape both files (the first file provided by the user and the second file which is 3 days apart), and uses the write_to_DB method to create a connection and populate the tables of the database.
-explore_saved_data_main_program() calls the three methods to plot each graph, while the make_request_main_program function instanciates an object of WebRequest, 
-retrieves the html bytes and saves these bytes to a local file. 
+Built using an Object-Oriented Programming (OOP) approach, the project is modular and split into classes for handling scraping, requests, file I/O, database operations, and data analysis.
 
-Once the user enters 'E', the program terminates.
+---
 
--------
-Git URL: https://gitlab.com/Yassine.Ibhir/python_project1.git
+## 🔧 Project Setup
+
+### 1 Clone the Repository
+
+```bash
+git clone https://github.com/Yibhir0/covid_cases_data_analysis.git
+cd covid_cases_data_analysis
+
+### 2 Start MySQL with Docker
+
+```bash
+docker-compose up -d
+
+### 3 Set Up the Python Environment
+
+```bash
+python -m venv env
+source env/bin/activate        # On Windows: .\env\Scripts\activate
+pip install -r requirements.txt
+
+### 4 How to Run the Program
+
+```bash
+python DriverClass.py
+

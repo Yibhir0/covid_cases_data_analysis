@@ -103,7 +103,7 @@ def scrape_save_main_program():
     file_name_to_scrape = None
     while not file_name_to_scrape:
         print('List of the available dates to scrape ,store and explore: ', gv.HTML_FILES_LIST)
-        choice = input('Enter the day in digits (99) of the day to scrape and save in database (e.g o4 or 21):')
+        choice = input('Enter the day in digits (99) of the day to scrape and save in database (e.g 04 or 21):')
         file_name_to_scrape = get_file_to_scrape(choice)
         if file_name_to_scrape:
             prepare_three_days_and_store(file_name_to_scrape)

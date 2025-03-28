@@ -9,11 +9,12 @@ class My_DB_SQL:
 
     # holds private information and initializes database connection and cursor as None
     def __init__(self):
-        self.__usr = os.environ['MYSQL_USR']
+        self.__usr = "coviduser"
         self.__hst = 'localhost'
-        self.__pwd = os.environ['MYSQL_PWD']
+        self.__pwd = "covidpass"
         self.__conn = None
         self.__cursr = None
+
 
     # This function makes a new connection to the database, creates a cursor to execute 
     # MySQL statements, and creates and selects the database, by calling their respective methods. 
